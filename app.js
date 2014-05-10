@@ -94,8 +94,82 @@ db.open(function(err, db) {
 
         });
     });
-    app.post('/notes',function(req,res){});
-    app.delete('/notes/:id',function(req,res){});
+    app.post('/notes',function(req,res){
+
+        var doc={};
+        console.log("!!!");
+        console.log(req.body.title);
+
+
+        db.collection('notes').find({}).toArray(function(err,docs){
+
+            if(!err){
+
+                var lastDoc=docs[docs.length-1];
+                var id=lastDoc.id;
+                id++;
+                doc.id=id;
+                doc.title=req.body.title;
+                db.collection('notes').insert(doc,function(err,docs){
+
+
+//
+//      console.log(docs[0]);
+
+                    if(!err){
+                        res.send({status:"success",msg:"note added successfully"});
+                    }
+                    else{
+                        res.send({status:"failurfe",msg:"error occured"});
+                    }
+
+                });
+            }
+            else{
+                res.send({status:"failurfe",msg:"error occured"});
+            }
+
+
+
+        });
+
+    });
+    app.delete('/notes/:id',function(req,res){
+
+        var id=req.params.id;
+        db.collection('notes').remove({id:id},function(err,docs){
+
+
+//
+//      console.log(docs[0]);
+
+            if(!err){
+                res.send({status:"success",msg:"note removed successfully"});
+            }
+            else{
+                res.send({status:"failurfe",msg:"error occured"});
+            }
+
+        });
+    });
+    app.delete('/notes',function(req,res){
+
+        var id=parseInt(req.body.id);
+        db.collection('notes').remove({id:id},function(err,docs){
+
+console.log("I am here");
+//
+//      console.log(docs[0]);
+
+            if(!err){
+                res.send({status:"success",msg:"note removed successfully"});
+            }
+            else{
+                res.send({status:"failurfe",msg:"error occured"});
+            }
+
+        });
+    });
 });
 
 

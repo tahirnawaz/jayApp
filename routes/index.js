@@ -5,7 +5,8 @@
 
 exports.index = function(req, res){
   //res.render('index', { title: 'Express' });
-if(typeof req.session !='undefined')
+    res.render("index", { username:  req.session.username });
+/*if(typeof req.session !='undefined')
 {
 
     console.log("I am in index");
@@ -23,6 +24,6 @@ if(typeof req.session !='undefined')
 }
     else{
     res.redirect('login');
-}
+}*/
 /*res.render('index.html');*/
 };
