@@ -67,7 +67,35 @@ db.open(function(err, db) {
 
 
         });
+
     });
+    app.get('/notes',function(req,res){
+
+        var query={};
+        db.collection('notes').find(query).toArray(function(err,docs){
+
+            res.send(docs);
+
+
+
+        });
+    });
+    app.get('/notes/:id',function(req,res){
+
+        var query={};
+        if(typeof req.params.id!='undefined'){
+            query['id']=parseInt(req.params.id);
+        }
+        db.collection('notes').find(query).toArray(function(err,docs){
+
+          res.send(docs);
+
+
+
+        });
+    });
+    app.post('/notes',function(req,res){});
+    app.delete('/notes/:id',function(req,res){});
 });
 
 
