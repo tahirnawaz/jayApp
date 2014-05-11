@@ -1,6 +1,6 @@
 jayApp
 ======
-Use Test DB and impoet in it two csv files I have given.
+Use Test DB and import in it two csv files I have given.
 Urls are
 
 type    name                    description
