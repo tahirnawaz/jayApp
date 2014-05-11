@@ -23,8 +23,8 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(cookieParser()) // required before session.
-app.use(session({ secret: 'keyboard cat', key: 'sid', cookie: { secure: true }}))
+app.use(express.cookieParser('your secret here')) // required before session.
+app.use(express.session())
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -39,7 +39,23 @@ var db = new Db('test', new Server('localhost', 27017));
 
 
 db.open(function(err, db) {
-    app.get('/', routes.index);
+//    app.get('/', routes.index);
+    app.get('/', function(req,res){
+        if( req.session.username != "" && typeof  req.session.username != "undefined")
+        {
+
+            console.log("SDDSDD");
+            console.log(req.session.username);
+            res.render("index", { username:  req.session.username });
+        }
+        else
+        {
+
+            res.redirect('login');
+        }
+
+
+    });
     app.get('/users', user.list);
     app.get('/login',user.loginForm);
     app.post('/login',function(req,res){
@@ -56,9 +72,11 @@ db.open(function(err, db) {
 
 
                 req.session.username=username;
+                console.log("req.session");
+                console.log(req.session);
 
-                res.render('index', { username: username });
-
+               // res.render('index', { username: username });
+                    res.redirect('/');
             }
             else{
                 res.render('login');
@@ -71,6 +89,8 @@ db.open(function(err, db) {
     });
     app.get('/notes',function(req,res){
 
+        console.log("reNO T EC ame");
+        console.log(req.session.username);
         var query={};
         db.collection('notes').find(query).toArray(function(err,docs){
 
@@ -157,7 +177,7 @@ db.open(function(err, db) {
         var id=parseInt(req.body.id);
         db.collection('notes').remove({id:id},function(err,docs){
 
-console.log("I am here");
+
 //
 //      console.log(docs[0]);
 
