@@ -89,7 +89,10 @@ db.open(function(err, db) {
     });
     app.get('/notes',function(req,res){
 
-        console.log("reNO T EC ame");
+        if( req.session.username != "" && typeof  req.session.username != "undefined")
+        {
+
+            console.log("reNO T EC ame");
         console.log(req.session.username);
         var query={};
         db.collection('notes').find(query).toArray(function(err,docs){
@@ -99,9 +102,18 @@ db.open(function(err, db) {
 
 
         });
+        }
+        else
+        {
+
+            res.redirect('login');
+        }
+
     });
     app.get('/notes/:id',function(req,res){
 
+        if( req.session.username != "" && typeof  req.session.username != "undefined")
+        {
         var query={};
         if(typeof req.params.id!='undefined'){
             query['id']=parseInt(req.params.id);
@@ -113,9 +125,16 @@ db.open(function(err, db) {
 
 
         });
+        }
+        else
+        {
+
+            res.redirect('login');
+        }
     });
     app.post('/notes',function(req,res){
-
+        if( req.session.username != "" && typeof  req.session.username != "undefined")
+        {
         var doc={};
         console.log("!!!");
         console.log(req.body.title);
@@ -152,10 +171,18 @@ db.open(function(err, db) {
 
 
         });
+        }
+        else
+        {
+
+            res.redirect('login');
+        }
 
     });
     app.delete('/notes/:id',function(req,res){
 
+        if( req.session.username != "" && typeof  req.session.username != "undefined")
+        {
         var id=req.params.id;
         db.collection('notes').remove({id:id},function(err,docs){
 
@@ -171,9 +198,17 @@ db.open(function(err, db) {
             }
 
         });
+        }
+        else
+        {
+
+            res.redirect('login');
+        }
     });
     app.delete('/notes',function(req,res){
 
+        if( req.session.username != "" && typeof  req.session.username != "undefined")
+        {
         var id=parseInt(req.body.id);
         db.collection('notes').remove({id:id},function(err,docs){
 
@@ -189,6 +224,12 @@ db.open(function(err, db) {
             }
 
         });
+        }
+        else
+        {
+
+            res.redirect('login');
+        }
     });
 });
 
